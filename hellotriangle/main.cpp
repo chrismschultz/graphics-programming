@@ -14,6 +14,15 @@ using std::cout;
 using std::endl;
 
 /*
+ * TEMPORARY SHADER SOURCE CODE
+ */
+const char *vertexShaderSource = "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main(){\n"
+        "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
+
+/*
  * FUNCTION PROTOTYPES
  */
 
@@ -60,6 +69,36 @@ int main(){
         glfwTerminate();
         return -1;
     }
+
+    /* Create vertex data containing three vertices for a triangle */
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
+    };
+
+    /* Declare a Vertex Buffer Object to store the vertices in GPU memory */
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    /* Create a shader object, storing its ID as an unsigned int */
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    
+    /* Set the shader source and compile it. FIrst argument is the shader object
+     * to compile. Second specifies how many strings we are passing as source
+     * code. Third is the actual source code. Fourth is an array of string
+     * lengths - leave as NULL */
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    /* Test for successful shader compilation */
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
 
     /* Tell OpenGL the size of the rendering window so that OpenGL knows how to display
      * the data and coordinates with respect to the window. 
