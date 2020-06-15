@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloTriangle", "HelloTriangle\HelloTriangle.vcxproj", "{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Debug|x64.ActiveCfg = Debug|x64
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Debug|x64.Build.0 = Debug|x64
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Debug|x86.ActiveCfg = Debug|Win32
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Debug|x86.Build.0 = Debug|Win32
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Release|x64.ActiveCfg = Release|x64
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Release|x64.Build.0 = Release|x64
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Release|x86.ActiveCfg = Release|Win32
+		{3B13DFF5-A2DD-47B3-9D44-10A287E5AFFC}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B14EC7C-2F48-4A80-9EC8-63B15F436F92}
+	EndGlobalSection
+EndGlobal
