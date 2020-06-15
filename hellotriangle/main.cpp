@@ -20,6 +20,9 @@ using std::endl;
 /* Callback function that gets called each time the window is resized. */
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
+/* Checking for user input */
+void processInput(GLFWwindow* window);
+
 /*
  * MAIN BODY
  */
@@ -68,6 +71,15 @@ int main(){
      * buffer (update the color values for each pixel in the window) and poll to see if
      * any events like keyboard or mouse events havebeen triggered */
     while (!glfwWindowShouldClose(window)){
+        
+        /* Test for user input */
+        processInput(window);
+
+        /* Execute rendering commands */
+        glClearColor(0.255f, 0.588f, 0.882f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        /* Check and call events and swap the buffers */
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -85,4 +97,11 @@ int main(){
 void framebufferSizeCallback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+}
+
+/* Checking for user input */
+void processInput(GLFWwindow* window){
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, true);
+    }
 }
