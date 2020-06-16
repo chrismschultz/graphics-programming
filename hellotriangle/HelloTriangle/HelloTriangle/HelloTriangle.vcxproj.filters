@@ -13,10 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{1884e272-c9fa-437b-9c73-1bbd1d637ef6}</UniqueIdentifier>
+      <Extensions>vs;fs;vert;frag;</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BaseShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseShader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleShader.vert">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="SimpleShader.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="FragTwo.frag">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "BaseShader.hpp"
 
 /*
  * FUNCTION PROTOTYPES
@@ -28,13 +29,14 @@ void processInput(GLFWwindow* window);
 const char *vertexShaderSource = "#version 330 core\n"
 	"layout (location = 0) in vec3 aPos;\n"
 	"void main(){\n"
-		"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"gl_Position = vec4(aPos, 1.0);\n"
 	"}\0";
 
 const char *fragmentShaderOne = "#version 330 core\n"
 	"out vec4 FragColor;\n"
+	"uniform vec4 ourColor;\n" // Uniform is global, unique per shader object, and can be accessed from any shader at any stage
 	"void main(){\n"
-		"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"FragColor = ourColor;\n"
 	"}\0";
 
 const char *fragmentShaderTwo = "#version 330 core\n"
@@ -50,11 +52,8 @@ const char *fragmentShaderTwo = "#version 330 core\n"
 int main() {
 	GLFWwindow * window;
 	GLenum err;
-	int success;
-	char infoLog[512];
 
-	/* Create the GLFW window 
-	 * ---------------------- */
+	/* ----- Create the GLFW Window ----- */
 
 	// Configure the GLFW library
 	glfwInit();
@@ -74,8 +73,7 @@ int main() {
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, frameBufferSizeCallback);
 
-	/* Initialize GLEW to manage OpenGL function pointers 
-	 * -------------------------------------------------- */
+	/* ----- Initialize GLEW to manage OpenGL function pointers ----- */
 
 	glewExperimental = GL_TRUE;
 	err = glewInit();
@@ -85,77 +83,13 @@ int main() {
 		return -1;
 	}
 
-	/* Build and compile the shader program
-	 * ------------------------------------ */
+	/* ----- Build and compile the shader program ----- */
 	 
 	// Create and compile the vertex shader, which processes the individual vertices
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	BaseShader ShaderOne("SimpleShader.vert", "SimpleShader.frag");
+	BaseShader ShaderTwo("SimpleShader.vert", "FragTwo.frag");
 
-	// Test for successful shader compilation
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "Error: Shader Vertex Compilation Failed\n" << infoLog << std::endl;
-	}
-
-	// Create and compile the first fragment shader, which outputs an orange color
-	unsigned int fShaderOne, fShaderTwo;
-	fShaderOne = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fShaderOne, 1, &fragmentShaderOne, NULL);
-	glCompileShader(fShaderOne);
-	glGetShaderiv(fShaderOne, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(fShaderOne, 512, NULL, infoLog);
-		std::cout << "Error: Fragment Shader Compilation Failed\n" << infoLog << std::endl;
-	}
-
-	// Create and compile the second fragment shader, which outputs a yellow color
-	fShaderTwo = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fShaderTwo, 1, &fragmentShaderTwo, NULL);
-	glCompileShader(fShaderTwo);
-	glGetShaderiv(fShaderTwo, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(fShaderOne, 512, NULL, infoLog);
-		std::cout << "Error: Fragment Shader Compilation Failed\n" << infoLog << std::endl;
-	}
-
-	// Create and link the shader program
-	unsigned int shaderProgramOne, shaderProgramTwo;
-	shaderProgramOne = glCreateProgram();
-	glAttachShader(shaderProgramOne, vertexShader);
-	glAttachShader(shaderProgramOne, fShaderOne);
-	glLinkProgram(shaderProgramOne);
-
-	// Test for successful shader program linking
-	glGetProgramiv(shaderProgramOne, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgramOne, 512, NULL, infoLog);
-		std::cout << "Error: Shader Program Linking Failed\n" << infoLog << std::endl;
-	}
-
-	// Create and link the second shader program
-	shaderProgramTwo = glCreateProgram();
-	glAttachShader(shaderProgramTwo, vertexShader);
-	glAttachShader(shaderProgramTwo, fShaderTwo);
-	glLinkProgram(shaderProgramTwo);
-
-	// Test for successful shader program linking
-	glGetProgramiv(shaderProgramTwo, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgramTwo, 512, NULL, infoLog);
-		std::cout << "Error: Shader Program Linking Failed\n" << infoLog << std::endl;
-	}
-
-	// Delete the now unused shaders
-	glDeleteShader(vertexShader);
-	glDeleteShader(fShaderOne);
-	glDeleteShader(fShaderTwo);
-
-	/* Set up vertex data and configure vertex attributes 
-	 * -------------------------------------------------- */
+	/* ----- Set up vertex data and configure attributes ----- */
 
 	// Create vertex data containing three vertices for a triangle
 	float triangleOneVertices[] = {
@@ -202,8 +136,7 @@ int main() {
 	// Tell OpenGL the size of the rendering window
 	glViewport(0, 0, 800, 600);
 
-	/* Render loop 
-	 * ----------- */
+	/* ----- Render loop ----- */
 	while (!glfwWindowShouldClose(window)) {
 
 		// Test for user input
@@ -214,12 +147,13 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw the first triangle
-		glUseProgram(shaderProgramOne);
+		ShaderOne.use();
 		glBindVertexArray(vaos[0]);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+
 
 		// Draw the second triangle
-		glUseProgram(shaderProgramTwo);
+		ShaderTwo.use();
 		glBindVertexArray(vaos[1]);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
