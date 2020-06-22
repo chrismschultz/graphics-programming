@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseShader.hpp" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragTwo.frag" />
